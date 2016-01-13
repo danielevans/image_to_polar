@@ -38,12 +38,11 @@ module ImageToPolar
 
           # require at least 25% opacity to be visible. and an average whiteness of over 50%. Yes this is all bullshit.
           if pixel.last > 0xffff/4 && (pixel.first(3).reduce(&:+) / 3.0 > 0xffff / 4.0)
-            resulting_image[rank][arc_segments - i] = 1 # reverses the image since theta is measured counter-clockwise by convention.
+            resulting_image[rank][arc_segments - i - 1] = 1 # reverses the image since theta is measured counter-clockwise by convention.
           end
         end
       end
-      require 'pry'
-      binding.pry
+
       output = JSON.generate(resulting_image)
       output.gsub!(/[\[\]]/, '[' => '{', ']' => '}')
       File.open output_file_name, 'w' do |f|
