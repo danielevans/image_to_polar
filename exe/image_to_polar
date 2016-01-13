@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require_relative '../lib/image_to_polar.rb'
+require 'optparse'
+require 'pry'
+options = {
+        arc_segments: 200,
+        ranks: 15
+}
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: image_to_polar [options] input_file output_file"
+
+  opts.on("-a N", "--arc-segments=N", "Points around the circle at which LEDs will be active (default=200)") do |a|
+    options[:arc_segments] = a.to_i
+  end
+
+  opts.on("-r N", "--ranks=N", "Number of ranks, a.k.a rows of LEDs (default=15)") do |a|
+    options[:ranks] = a.to_i
+  end
+end.parse!
+
+options[:input_file_name] = ARGV[0]
+options[:output_file_name] = ARGV[1]
+
+ImageToPolar::Translator.new(options).translate!
