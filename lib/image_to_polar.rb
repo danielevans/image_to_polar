@@ -17,7 +17,7 @@ module ImageToPolar
 
     def translate!
       image = Array(Magick::Image.read(input_file_name)).first
-      resulting_image = Array.new(ranks) { [0]*arc_segments }
+      resulting_image = Array.new(arc_segments) { [0]*ranks }
 
       # get smarter about interpolation later.
       segment_width  = 10
@@ -38,7 +38,7 @@ module ImageToPolar
 
           # require at least 25% opacity to be visible. and an average whiteness of over 50%. Yes this is all bullshit.
           if pixel.last > 0xffff/4 && (pixel.first(3).reduce(&:+) / 3.0 > 0xffff / 4.0)
-            resulting_image[rank][arc_segments - i - 1] = 1 # reverses the image since theta is measured counter-clockwise by convention.
+            resulting_image[arc_segments - i - 1][rank] = 1 # reverses the image since theta is measured counter-clockwise by convention.
           end
         end
       end
